@@ -46,6 +46,26 @@ namespace Automation
             }
         }
 
+        private string sheetName;
+        [Parameter(
+            Mandatory = true,
+            Position = 0,
+            ValueFromPipeline = false,
+            ValueFromPipelineByPropertyName = false)]
+        public string SheetName
+        {
+            get
+            {
+                return this.sheetName;
+            }
+            set
+            {
+                if (value == null) throw new ArgumentNullException("value");
+
+                this.sheetName = value;
+            }
+        }
+            
         protected override void BeginProcessing()
         {
             WriteVerbose(string.Format(
@@ -61,15 +81,31 @@ namespace Automation
 
             if (!this.excelDataReader.IsValid)
             {
-                throw new ArgumentException(string.Format(
-                    CultureInfo.CurrentCulture,
-                    "The specified file {0} is not a valid open-xml formatted Excel file.{1}Error details:{1}{2}",
-                    this.roleAssignmentFile,
-                    Environment.NewLine,
-                    this.excelDataReader.ExceptionMessage
+                throw new ArgumentException(
+                    string.Format(
+                        CultureInfo.CurrentCulture,
+                        "The specified file {0} is not a valid open-xml formatted Excel file.{1}Error details:{1}{2}",
+                        this.roleAssignmentFile,
+                        Environment.NewLine,
+                        this.excelDataReader.ExceptionMessage
                     )
                 );
             }
+
+            var dataSet = this.excelDataReader.AsDataSet();
+            var sheet = dataSet.Tables[this.sheetName];
+            if (sheet == null)
+            {
+                throw new ArgumentException(
+                    string.Format(
+                        CultureInfo.CurrentCulture,
+                        "The Excel data file {0} does not contain the specified sheet '{1}'",
+                        this.roleAssignmentFile,
+                        this.sheetName
+                    )
+                );
+            }
+
         }
 
         protected override void EndProcessing()
