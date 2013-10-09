@@ -58,6 +58,18 @@ namespace Automation
             this.excelDataReader = ExcelReaderFactory.CreateOpenXmlReader(
                 File.Open(this.roleAssignmentFile, FileMode.Open, FileAccess.Read)
             );
+
+            if (!this.excelDataReader.IsValid)
+            {
+                throw new ArgumentException(string.Format(
+                    CultureInfo.CurrentCulture,
+                    "The specified file {0} is not a valid open-xml formatted Excel file.{1}Error details:{1}{2}",
+                    this.roleAssignmentFile,
+                    Environment.NewLine,
+                    this.excelDataReader.ExceptionMessage
+                    )
+                );
+            }
         }
 
         protected override void EndProcessing()
