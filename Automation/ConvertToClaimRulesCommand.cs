@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Excel;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -11,7 +12,10 @@ namespace Automation
 {
     [Cmdlet(VerbsData.ConvertTo, "ClaimRules")]
     public class ConvertToClaimRulesCommand
+        : Cmdlet
     {
+        private IExcelDataReader excelDataReader;
+
         private string roleAssignmentFile;
         [Parameter(
             Mandatory = true,
@@ -40,6 +44,25 @@ namespace Automation
 
                 this.roleAssignmentFile = value;
             }
+        }
+
+        protected override void BeginProcessing()
+        {
+            WriteVerbose(string.Format(
+                CultureInfo.CurrentCulture,
+                "Opening file {0} for reading as an Excel open-xml formatted spreadsheet",
+                this.roleAssignmentFile
+                )
+            );
+
+            this.excelDataReader = ExcelReaderFactory.CreateOpenXmlReader(
+                File.Open(this.roleAssignmentFile, FileMode.Open, FileAccess.Read)
+            );
+        }
+
+        protected override void EndProcessing()
+        {
+            this.excelDataReader.Close();
         }
     }
 }
