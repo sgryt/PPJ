@@ -57,9 +57,16 @@
     <Compile Include="RolePermissionClaimRule.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClaimRules.psm1" />
+    <None Include="ClaimRules.psm1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="New-ClaimRulesFile.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
-    <None Include="Register-PPJCmdlets.ps1" />
+    <None Include="Register-PPJCmdlets.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
