@@ -5,3 +5,4 @@ param(
 )
 
 Import-Module -Name $CmdletAssemblyPath 
+Import-Module ./ClaimRules.psm1
