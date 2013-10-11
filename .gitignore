@@ -4,3 +4,4 @@ TestResults/
 *.nupkg
 *.suo
 *.csproj.user
+AutomationTest/._*.xlsx
