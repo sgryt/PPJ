@@ -13,4 +13,4 @@ Write-Host ("Converting role-to-permission assignments in {0} to AD FS claim rul
 $crs = ConvertTo-ClaimRules -RoleAssignmentFile (gi $RoleAssignmentExcelFile).FullName
 
 Write-Host ("Writing {0} claim rules to {1}" -f ($crs | measure).Count, (gi $ClaimRulesOutputFile).FullName) -ForegroundColor DarkGreen
-($crs | New-ClaimRule) -join [System.String]::Format("{0}{0}", [System.Environment]::NewLine) | Set-Content -Path $ClaimRulesOutputFile
+($crs | New-ClaimRule) -join [System.String]::Format("{0}{0}", [System.Environment]::NewLine) | Set-Content -Path $ClaimRulesOutputFile -Encoding UTF8
