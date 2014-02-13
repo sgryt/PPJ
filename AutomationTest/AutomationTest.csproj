@@ -62,6 +62,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Bruger rettigheder 07022014.xlsx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="PPJ rettigheder - alle tildelinger.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

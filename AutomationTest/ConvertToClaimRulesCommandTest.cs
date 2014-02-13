@@ -17,6 +17,8 @@ namespace AutomationTest
         public const string duplicateRoleNamesFile = ".\\PPJ rettigheder - duplikerede rollenavne.xlsx";
         public const string duplicatePermissionsFile = ".\\PPJ rettigheder - duplikerede rettigheder.xlsx";
 
+        public const string updatedLayoutFile = ".\\Bruger rettigheder 07022014.xlsx";
+
         [Theory, AutoConvertData]
         public void InvokeCanUseValidExcelFile(
             ConvertToClaimRulesCommand sut
@@ -44,6 +46,7 @@ namespace AutomationTest
         )
         {
             sut.RoleAssignmentFile = ConvertToClaimRulesCommandTest.allPermissionsAssignmentsFile;
+            sut.PermissionsUriPrefix = "http://schemas.danskeregioner.dk/2013/10/identity/claims/rettighed/";
 
             Assert.Equal(315, sut.Invoke().OfType<RolePermissionClaimRule>().Count());
         }
@@ -181,6 +184,20 @@ namespace AutomationTest
 
             Assert.False(actual);
         }
+        
+        [Theory, AutoConvertData]
+        public void InvokeReturnsCorrectNumberOfRecordsForFileWithUpdatedLayout(
+            ConvertToClaimRulesCommand sut
+        )
+        {
+            sut.RoleAssignmentFile = ConvertToClaimRulesCommandTest.updatedLayoutFile;
+            sut.PermissionsUriPrefix = "http://schemas.danskeregioner.dk/2013/10/identity/claims/rettighed/";
+            sut.PermissionIdsStartCell = new GridCoordinate(5, 0);
+            sut.PermissionsShortNameColumnIndex = 1;
+            sut.PermissionsTitleColumnIndex = 2;
+            sut.RoleValuesStartCell = new GridCoordinate(2, 10);
 
+            Assert.Equal(18, sut.Invoke().OfType<RolePermissionClaimRule>().Count());
+        }
     }
 }

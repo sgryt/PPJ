@@ -243,6 +243,14 @@ namespace Automation
                     {
                         continue;
                     }
+                    if(string.IsNullOrEmpty(permissionShortName))
+                    {
+                        throw new InvalidOperationException(string.Format("Missing permission short name in row {0} (URI '{1}', title '{2}')",
+                            rowIndex + 1,
+                            permissionUri,
+                            permissionTitle
+                            ));
+                    }
 
                     this.permissionCells.Add(
                         new Permission(
@@ -363,7 +371,13 @@ namespace Automation
                     {
                         WriteWarning(string.Format(CultureInfo.CurrentCulture,
                             "The following role values are marked as if linked to a permission, but on a row (number {2}) that contains no permissions URI value{1}{0}{1}The markings will not have any effect.",
-                            nonEmptyRoleAssignmentColumnIndices.Aggregate("", (acc, value) => acc + this.roleCells.Single(rc => rc.Coordinate.ColIndex == value).Role + ","),
+                            nonEmptyRoleAssignmentColumnIndices.Aggregate("", (acc, value) => 
+                                acc + this.roleCells
+                                    .Where(rc => rc.Coordinate.ColIndex == value)
+                                    .DefaultIfEmpty(new RoleCell(new GridCoordinate(0, 0), "N/A"))
+                                    .Single()
+                                    .Role + ","
+                            ),
                             Environment.NewLine,
                             rowIndex + 1
                             )
