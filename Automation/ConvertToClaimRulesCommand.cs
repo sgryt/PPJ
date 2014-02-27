@@ -243,6 +243,10 @@ namespace Automation
                     {
                         continue;
                     }
+                    if (string.IsNullOrEmpty(permissionShortName))
+                    {
+                        permissionShortName = permissionTitle;
+                    }
                     if(string.IsNullOrEmpty(permissionShortName))
                     {
                         throw new InvalidOperationException(string.Format("Missing permission short name in row {0} (URI '{1}', title '{2}')",
@@ -251,6 +255,17 @@ namespace Automation
                             permissionTitle
                             ));
                     }
+                    permissionShortName = permissionShortName
+                        .Replace("æ", "ae")
+                        .Replace("ø", "oe")
+                        .Replace("å", "aa")
+                        .Replace("Æ", "Ae")
+                        .Replace("Ø", "Oe")
+                        .Replace("Å", "Aa")
+                        ;
+                    permissionShortName = permissionShortName.Split(" \t\r\n".ToArray(), StringSplitOptions.RemoveEmptyEntries)
+                        .Select(c => c.Substring(0, 1).ToUpper() + c.Substring(1))
+                        .Aggregate(string.Empty, (s, acc) => s + acc);
 
                     this.permissionCells.Add(
                         new Permission(
@@ -416,6 +431,14 @@ namespace Automation
         {
             this.dataReader.Close();
             this.excelDataReader.Close();
+        }
+
+        public IEnumerable<Permission> Permissions
+        {
+            get
+            {
+                return this.permissionCells;
+            }
         }
 
         public void Dispose()

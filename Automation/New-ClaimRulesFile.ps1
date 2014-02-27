@@ -19,7 +19,7 @@ param(
 	[int]$PermissionsShortNameColumnIndex = 1,
 
 	[Parameter(Mandatory=$False,Position=6)]
-	[int]$PermissionsTitleColumnIndex = 1,
+	[int]$PermissionsTitleColumnIndex = 2,
 
 	[Parameter(Mandatory=$False,Position=7)]
 	[Automation.GridCoordinate]$RoleValuesStartCell
